@@ -220,7 +220,7 @@ $('begin').onclick=()=>$('gate').style.display='none';
 // nav
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>show(b.dataset.s));
 function show(s){document.querySelectorAll('section').forEach(x=>x.classList.toggle('on',x.id===s));document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x.dataset.s===s));if(location.hash!=='#'+s)history.replaceState(null,'','#'+s)}
-show((location.hash||'#cycle').slice(1)||'cycle');
+const IDS=[...document.querySelectorAll('section')].map(x=>x.id);const fromHash=()=>{const h=location.hash.slice(1);show(IDS.includes(h)?h:'cycle')};window.addEventListener('hashchange',fromHash);fromHash();
 
 // ---- statistics ----
 function lgamma(x){const c=[76.18009172947146,-86.50532032941677,24.01409824083091,-1.231739572450155,0.1208650973866179e-2,-0.5395239384953e-5];let y=x,t=x+5.5;t-=(x+.5)*Math.log(t);let s=1.000000000190015;for(const k of c)s+=k/++y;return -t+Math.log(2.5066282746310005*s/x)}
