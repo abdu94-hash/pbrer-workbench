@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PBRER Workbench — Companion to The PBRER Handbook</title>
+<meta name="description" content="Free companion workbench to The PBRER Handbook: reporting-cycle planner, rate and confidence interval calculators, exposure comparison, count reconciliation, observed-to-expected, signal-evaluation worksheet, benefit–risk effects table, and consistency and QC checklists.">
+<style>
+:root{--navy:#1F3A5F;--teal:#0E6E7E;--amber:#D9922E;--red:#B5473A;--green:#4E8A4E;--grey:#8A94A0;--light:#E7F1FB;--bg:#F5F7FA;--ink:#1E2833}
+*{box-sizing:border-box}
+body{margin:0;font:15px/1.5 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+header{background:var(--navy);color:#fff;padding:18px 24px}
+header h1{margin:0;font-size:22px}header p{margin:4px 0 0;opacity:.85;font-size:14px}
+.wrap{display:flex;min-height:calc(100vh - 80px)}
+nav{width:250px;background:#fff;border-right:1px solid #dde3ea;padding:12px 0;flex-shrink:0}
+nav button{display:block;width:100%;text-align:left;border:0;background:none;padding:9px 18px;font:inherit;color:var(--ink);cursor:pointer;border-left:4px solid transparent}
+nav button:hover{background:var(--light)}nav button.on{border-left-color:var(--teal);background:var(--light);font-weight:600;color:var(--navy)}
+nav .grp{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--grey);padding:12px 18px 4px}
+main{flex:1;padding:22px 28px;max-width:1100px}
+section{display:none}section.on{display:block}
+h2{color:var(--navy);margin:0 0 4px;font-size:21px}.ch{color:var(--teal);font-size:13px;margin-bottom:14px}
+.card{background:#fff;border:1px solid #dde3ea;border-radius:10px;padding:16px 18px;margin-bottom:16px}
+.card h3{margin:0 0 10px;font-size:15px;color:var(--navy)}
+label{display:block;font-size:13px;color:#46515e;margin:8px 0 3px}
+input,select,textarea{font:inherit;padding:7px 9px;border:1px solid #c5ced8;border-radius:6px;width:100%;background:#fff}
+textarea{min-height:64px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px 16px}
+.btn{display:inline-block;background:var(--teal);color:#fff;border:0;border-radius:6px;padding:8px 14px;font:inherit;cursor:pointer;margin:6px 6px 0 0}
+.btn.alt{background:#fff;color:var(--teal);border:1px solid var(--teal)}.btn.navy{background:var(--navy)}
+table{border-collapse:collapse;width:100%;font-size:14px;margin-top:8px}
+th{background:var(--navy);color:#fff;text-align:left;padding:7px 8px;font-weight:600}
+td{border-bottom:1px solid #e3e8ee;padding:6px 8px;vertical-align:top}
+.out{background:var(--light);border-left:4px solid var(--teal);padding:12px 14px;border-radius:6px;margin-top:12px;white-space:pre-wrap}
+.warn{background:#FBEBEB;border-left:4px solid var(--red);padding:10px 14px;border-radius:6px;margin-top:10px}
+.ok{background:#E5F4E4;border-left:4px solid var(--green);padding:10px 14px;border-radius:6px;margin-top:10px}
+.kpi{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px}.kpi div{background:#fff;border:1px solid #dde3ea;border-radius:8px;padding:10px 14px;min-width:150px}
+.kpi b{display:block;font-size:20px;color:var(--navy)}.kpi span{font-size:12px;color:#5b6673}
+.note{font-size:12.5px;color:#5b6673}
+.bar{height:18px;border-radius:3px;display:inline-block;vertical-align:middle}
+.scale{display:flex;gap:6px;margin-top:6px}.scale label{flex:1;margin:0;padding:10px;border-radius:6px;color:#fff;font-weight:600;font-size:13px;cursor:pointer;text-align:center}
+.scale input{width:auto;margin-right:6px}
+#gate{position:fixed;inset:0;background:rgba(15,28,46,.92);display:flex;align-items:center;justify-content:center;z-index:9}
+#gate .box{background:#fff;max-width:640px;border-radius:12px;padding:26px 30px;max-height:90vh;overflow:auto}
+#gate h2{margin-top:0}#gate ol{font-size:13.5px;padding-left:20px}
+.case{display:inline-block;font-size:12px;background:#F9EEDA;border:1px solid #e0c58e;border-radius:12px;padding:2px 10px;margin-left:6px;color:#7a5a1a}
+footer{font-size:12px;color:#6b7684;padding:16px 28px;border-top:1px solid #dde3ea;background:#fff}
+@media(max-width:800px){.wrap{flex-direction:column}nav{width:100%;display:flex;flex-wrap:wrap}nav button{width:auto}nav .grp{display:none}}
+@media print{nav,header .btn,#gate,.btn,footer{display:none!important}section{display:block!important;page-break-after:always}body{background:#fff}.card{border:0}}
+</style>
+</head>
+<body>
+<div id="gate"><div class="box">
+<h2>PBRER Workbench</h2>
+<p>A free companion to <i>The PBRER Handbook</i> by Hafez Selim, MD, PhD (Selim Medical Press). Before you begin, please read and accept these terms.</p>
+<ol>
+<li>This workbench is an educational aid. It is not regulatory, legal, or medical advice and does not replace professional judgement.</li>
+<li>Calculations are provided as is. Verify every number before using it in a regulatory document.</li>
+<li>Regulatory timelines shown are typical values described in the book; confirm current requirements with each authority.</li>
+<li>The case examples (Corvaprofen, Halvorast, Ostrelimab, Navelase alfa) are fictional composite cases with synthetic data.</li>
+<li>Everything runs in your browser. Nothing you type is uploaded or stored by this page; it is lost when you close or reload it.</li>
+<li>Do not enter personal data about patients.</li>
+<li>The templates and outputs are author-developed working aids, not official forms.</li>
+<li>No warranty is given, and the author and publisher accept no liability for use of the outputs.</li>
+<li>The views expressed are the author's own and not those of any employer or regulator.</li>
+<li>You may use outputs within your organization; redistribution of the workbench itself requires permission.</li>
+</ol>
+<label><input type="checkbox" id="agree" style="width:auto"> I have read and accept these terms.</label>
+<button class="btn navy" id="begin" disabled>Begin</button>
+</div></div>
+
+<header><h1>PBRER Workbench</h1><p>Companion to <i>The PBRER Handbook: Safety Evaluation, Benefit–Risk Assessment, and Regulatory Review for PBRERs and PSURs</i> · <button class="btn alt" style="margin:0 0 0 8px;padding:3px 10px;background:#fff" onclick="doPrint()">Print all modules</button><span id="pmsg" style="font-size:12px;margin-left:8px"></span></p></header>
+<div class="wrap">
+<nav id="nav">
+<div class="grp">Plan</div>
+<button data-s="cycle">1 · Reporting-cycle planner</button>
+<div class="grp">Exposure and counts</div>
+<button data-s="rate">2 · Rate and confidence interval</button>
+<button data-s="expo">3 · Exposure method comparison</button>
+<button data-s="recon">4 · Count reconciliation</button>
+<div class="grp">Evaluation</div>
+<button data-s="oe">5 · Observed vs expected</button>
+<button data-s="trial">6 · Two-arm trial comparison</button>
+<button data-s="signal">7 · Signal-evaluation worksheet</button>
+<div class="grp">Judgement and review</div>
+<button data-s="br">8 · Benefit–risk effects table</button>
+<button data-s="cons">9 · Action consistency check</button>
+<button data-s="qc">10 · Review and QC checklist</button>
+<button data-s="about">About</button>
+</nav>
+<main>
+
+<section id="cycle"><h2>Reporting-cycle planner</h2><div class="ch">Book: Chapter 4 · Template T1</div>
+<div class="card"><h3>Inputs</h3><div class="grid">
+<div><label>Data lock point</label><input type="date" id="cy_dlp"></div>
+<div><label>Interval length</label><select id="cy_len"><option value="70">12 months or less (70 days)</option><option value="90">More than 12 months (90 days)</option></select></div>
+<div><label>Buffer before deadline (days)</label><input type="number" id="cy_buf" value="5"></div>
+</div>
+<button class="btn" onclick="cycle()">Build plan</button><button class="btn alt" onclick="demo('cycleD')">Load Case D</button></div>
+<div class="card"><h3>Milestones</h3><div id="cy_out" class="note">Enter a DLP and press Build plan.</div></div>
+</section>
+
+<section id="rate"><h2>Rate and confidence interval</h2><div class="ch">Book: Chapters 8, 13, 14</div>
+<div class="card"><h3>Inputs</h3><div class="grid">
+<div><label>Number of cases (events)</label><input type="number" id="r_n" min="0"></div>
+<div><label>Denominator</label><input type="number" id="r_d" min="0"></div>
+<div><label>Denominator unit</label><select id="r_u"><option>patient-years</option><option>infusions</option><option>patients</option><option>administrations</option></select></div>
+<div><label>Express per</label><select id="r_per"><option value="100">100</option><option value="1000">1,000</option><option value="100000" selected>100,000</option></select></div>
+</div>
+<button class="btn" onclick="rate()">Calculate</button><button class="btn alt" onclick="demo('rateD')">Load Case D anaphylaxis</button><button class="btn alt" onclick="demo('rateB')">Load Case B Hy's law in trials (0 events)</button>
+<div id="r_out"></div><p class="note">Exact (Poisson) 95% confidence interval. For zero events, the rule-of-three upper bound is also shown. A reporting rate is not an incidence rate.</p></div>
+</section>
+
+<section id="expo"><h2>Exposure method comparison</h2><div class="ch">Book: Chapters 8 and 14 · Template T6</div>
+<div class="card"><h3>Inputs</h3><div class="grid">
+<div><label>Cases, previous interval</label><input type="number" id="e_cp"></div>
+<div><label>Exposure, previous interval (old method)</label><input type="number" id="e_xp"></div>
+<div><label>Cases, current interval</label><input type="number" id="e_cc"></div>
+<div><label>Exposure, current interval (old method)</label><input type="number" id="e_xo"></div>
+<div><label>Exposure, current interval (new method)</label><input type="number" id="e_xn"></div>
+<div><label>Current cases from solicited sources (optional)</label><input type="number" id="e_sol" value="0"></div>
+</div>
+<button class="btn" onclick="expo()">Compare</button><button class="btn alt" onclick="demo('expoA')">Load Case A</button>
+<div id="e_out"></div></div>
+</section>
+
+<section id="recon"><h2>Count reconciliation</h2><div class="ch">Book: Chapter 9 · Template T7</div>
+<div class="card"><h3>Inputs</h3><div class="grid">
+<div><label>Reports retrieved by search</label><input type="number" id="c_ret"></div>
+<div><label>Duplicates removed</label><input type="number" id="c_dup" value="0"></div>
+<div><label>Not meeting case definition</label><input type="number" id="c_def" value="0"></div>
+<div><label>Solicited / program reports (shown separately)</label><input type="number" id="c_sol" value="0"></div>
+</div>
+<button class="btn" onclick="recon()">Reconcile</button><button class="btn alt" onclick="demo('reconA')">Load Case A</button><button class="btn alt" onclick="demo('reconB')">Load Case B</button>
+<div id="c_out"></div></div>
+</section>
+
+<section id="oe"><h2>Observed vs expected</h2><div class="ch">Book: Chapter 13, Step 4</div>
+<div class="card"><h3>Inputs</h3><div class="grid">
+<div><label>Observed cases</label><input type="number" id="o_obs"></div>
+<div><label>Exposure (patient-years)</label><input type="number" id="o_py"></div>
+<div><label>Background rate per 100,000 person-years</label><input type="number" id="o_bg" step="any"></div>
+<div><label>Source of background rate</label><input id="o_src" placeholder="population, case definition, year"></div>
+</div>
+<button class="btn" onclick="oe()">Calculate</button><button class="btn alt" onclick="demo('oeB')">Load Case B</button>
+<div id="o_out"></div><p class="note">The CI treats observed cases as Poisson and the expected count as fixed. Reports are subject to under-reporting, so observed counts are usually a lower bound; background rates often come from different populations and definitions. Use O/E to calibrate, not to conclude.</p></div>
+</section>
+
+<section id="trial"><h2>Two-arm trial comparison</h2><div class="ch">Book: Chapters 10, 13, 17</div>
+<div class="card"><h3>Inputs</h3><div class="grid">
+<div><label>Events, treatment arm</label><input type="number" id="t_a"></div><div><label>N, treatment arm</label><input type="number" id="t_n1"></div>
+<div><label>Events, control arm</label><input type="number" id="t_b"></div><div><label>N, control arm</label><input type="number" id="t_n2"></div>
+</div>
+<button class="btn" onclick="trial()">Calculate</button><button class="btn alt" onclick="demo('trialB')">Load Case B (ALT &gt; 3 × ULN)</button>
+<div id="t_out"></div><p class="note">Relative risk with log-scale 95% CI; risk difference with Wald 95% CI; number needed to harm = 1 / risk difference. With few events, prefer exact methods and report counts.</p></div>
+</section>
+
+<section id="signal"><h2>Signal-evaluation worksheet</h2><div class="ch">Book: Chapter 13 · Template T9</div>
+<div class="card"><h3>Steps 1–2 · Question and evidence set</h3>
+<label>Product</label><input id="s_prod">
+<label>Evaluation question (one sentence)</label><textarea id="s_q"></textarea>
+<label>Data sources and search</label><textarea id="s_src"></textarea>
+<label>Case definition</label><textarea id="s_def"></textarea></div>
+<div class="card"><h3>Step 3 · Cases by informativeness</h3><div class="grid">
+<div><label>Informative, supporting</label><input type="number" id="s_sup" value="0"></div>
+<div><label>Competing explanation</label><input type="number" id="s_comp" value="0"></div>
+<div><label>Insufficient information</label><input type="number" id="s_ins" value="0"></div>
+<div><label>Informative against</label><input type="number" id="s_ag" value="0"></div>
+</div><label>Key case features (time to onset, dechallenge, rechallenge)</label><textarea id="s_feat"></textarea><div id="s_bar"></div></div>
+<div class="card"><h3>Steps 4–5 · Cumulative evidence and alternatives</h3>
+<label>Other sources (trials, studies, literature, non-clinical, O/E)</label><textarea id="s_cum"></textarea>
+<label>Alternative explanations and their effect</label><textarea id="s_alt"></textarea></div>
+<div class="card"><h3>Step 6 · Conclusion</h3>
+<div class="scale">
+<label style="background:var(--green)"><input type="radio" name="s_lvl" value="The evidence does not support a causal association">Does not support</label>
+<label style="background:var(--grey)"><input type="radio" name="s_lvl" value="The evidence is insufficient to assess a causal association">Insufficient to assess</label>
+<label style="background:var(--amber)"><input type="radio" name="s_lvl" value="The evidence is suggestive of, but insufficient to establish, a causal association">Suggestive but insufficient</label>
+<label style="background:var(--red)"><input type="radio" name="s_lvl" value="The evidence supports a causal association">Supports</label></div>
+<label>What the evidence does not establish / remaining uncertainty</label><textarea id="s_unc"></textarea>
+<label>Reasonable alternative position, and why not adopted</label><textarea id="s_altpos"></textarea></div>
+<div class="card"><h3>Step 7 · Actions</h3><textarea id="s_act" placeholder="One action per line"></textarea>
+<button class="btn" onclick="signal()">Generate Section 16.2 draft</button><button class="btn alt" onclick="demo('sigB')">Load Case B</button>
+<div id="s_out"></div></div>
+</section>
+
+<section id="br"><h2>Benefit–risk effects table</h2><div class="ch">Book: Chapters 16 and 17 · Template T12</div>
+<div class="card"><h3>Context</h3><div class="grid"><div><label>Product and indication</label><input id="b_ind"></div></div>
+<label>Medical need and alternatives</label><textarea id="b_ctx"></textarea></div>
+<div class="card"><h3>Effects</h3><table id="b_tab"><thead><tr><th>Type</th><th>Description</th><th>Magnitude</th><th>Evidence</th><th>Uncertainty</th><th></th></tr></thead><tbody></tbody></table>
+<button class="btn alt" onclick="brRow()">Add row</button><button class="btn alt" onclick="demo('brB')">Load Case B</button>
+<label>What changed this interval</label><textarea id="b_chg"></textarea>
+<label>Conclusion (and any conditions)</label><textarea id="b_con"></textarea>
+<button class="btn" onclick="brOut()">Generate Section 18 text</button><div id="b_out"></div>
+<div id="b_warn"></div></div>
+</section>
+
+<section id="cons"><h2>Action consistency check</h2><div class="ch">Book: Chapter 18</div>
+<div class="card"><p class="note">List each proposed action and tick every section where it appears. Every action must appear in Section 19 and in the section that supports it; the checker flags gaps.</p>
+<table id="k_tab"><thead><tr><th>Action</th><th>4</th><th>15</th><th>16</th><th>18</th><th>19</th><th>Exec. summary</th><th>RMP / regional</th><th></th></tr></thead><tbody></tbody></table>
+<button class="btn alt" onclick="kRow()">Add action</button><button class="btn alt" onclick="demo('consB')">Load Case B</button><button class="btn" onclick="kCheck()">Check</button><div id="k_out"></div></div>
+</section>
+
+<section id="qc"><h2>Review and QC checklist</h2><div class="ch">Book: Chapter 19 · Template T13</div>
+<div class="card"><div id="q_list"></div><div id="q_prog" class="out"></div></div>
+</section>
+
+<section id="about"><h2>About this workbench</h2><div class="ch">Companion to The PBRER Handbook</div>
+<div class="card"><p>The workbench implements the calculators and worksheets described in <i>The PBRER Handbook</i>. Each module names the chapter and template it supports. The demo buttons load the book's fictional composite cases so you can check your understanding against the worked examples.</p>
+<p>All calculations run in your browser. Nothing is saved or sent anywhere; use <b>Print all modules</b> (or your browser's print to PDF) to keep a record.</p>
+<p class="note">© 2026 Hafez Selim · Selim Medical Press. Educational use only. Not regulatory advice.</p></div>
+</section>
+</main></div>
+<footer>PBRER Workbench · companion to <i>The PBRER Handbook</i> · educational aid, not regulatory advice · all data stays in your browser</footer>
+
+<script>
+const $=id=>document.getElementById(id), v=id=>parseFloat($(id).value), fmt=(x,d=1)=>isFinite(x)?x.toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d}):'—';
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+// gate
+$('agree').onchange=e=>$('begin').disabled=!e.target.checked;
+$('begin').onclick=()=>$('gate').style.display='none';
+// nav
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>show(b.dataset.s));
+function show(s){document.querySelectorAll('section').forEach(x=>x.classList.toggle('on',x.id===s));document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x.dataset.s===s));if(location.hash!=='#'+s)history.replaceState(null,'','#'+s)}
+show((location.hash||'#cycle').slice(1)||'cycle');
+
+// ---- statistics ----
+function lgamma(x){const c=[76.18009172947146,-86.50532032941677,24.01409824083091,-1.231739572450155,0.1208650973866179e-2,-0.5395239384953e-5];let y=x,t=x+5.5;t-=(x+.5)*Math.log(t);let s=1.000000000190015;for(const k of c)s+=k/++y;return -t+Math.log(2.5066282746310005*s/x)}
+function gammp(a,x){if(x<=0)return 0;if(x<a+1){let ap=a,sum=1/a,del=sum;for(let n=0;n<500;n++){ap++;del*=x/ap;sum+=del;if(Math.abs(del)<Math.abs(sum)*1e-14)break}return sum*Math.exp(-x+a*Math.log(x)-lgamma(a))}
+ let b=x+1-a,c=1e300,d=1/b,h=d;for(let i=1;i<500;i++){const an=-i*(i-a);b+=2;d=an*d+b;if(Math.abs(d)<1e-300)d=1e-300;c=b+an/c;if(Math.abs(c)<1e-300)c=1e-300;d=1/d;const del=d*c;h*=del;if(Math.abs(del-1)<1e-14)break}return 1-Math.exp(-x+a*Math.log(x)-lgamma(a))*h}
+function qgamma(p,a){let lo=0,hi=Math.max(10,a*10+50);for(let i=0;i<200;i++){const m=(lo+hi)/2;if(gammp(a,m)<p)lo=m;else hi=m}return (lo+hi)/2}
+function poisCI(k){return [k===0?0:qgamma(.025,k),qgamma(.975,k+1)]}
+
+function doPrint(){try{window.print()}catch(e){}setTimeout(()=>{$("pmsg").textContent="If no print dialog opened, open this page in its own tab and print from the browser menu."},800)}
+// ---- 1 cycle ----
+const MS=[["Kick-off and statement of purpose",-60],["Source-document requests issued",-50],["Exposure method confirmed",-30],["Pre-DLP sections drafted (1–4, ongoing evaluations)",-10],["Data lock point",0],["Case retrieval and tabulations complete",12],["Exposure final and circulated",14],["Evaluations complete (worksheets)",25],["Full first draft",32],["Scientific review complete",40],["Final draft",47],["Quality control complete",52],["Approval and governance endorsement",58],["Publishing and regional appendices",63]];
+function addDays(d,n){const x=new Date(d+'T12:00:00');x.setDate(x.getDate()+n);return x}
+const dstr=x=>x.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric',weekday:'short'});
+function cycle(){const d=$('cy_dlp').value;if(!d){$('cy_out').innerHTML='<div class="warn">Enter a data lock point.</div>';return}
+ const L=+$('cy_len').value,buf=+$('cy_buf').value,scale=L/70;let rows=MS.map(([t,o])=>[t,o<=0?o:Math.round(o*scale)]);
+ rows.push(["Planned submission",L-buf],["Submission deadline",L],["Confirmation of receipt filed",L]);
+ let h='<table><tr><th>Milestone</th><th>Day vs DLP</th><th>Date</th></tr>';for(const [t,o] of rows){const dt=addDays(d,o),we=[0,6].includes(dt.getDay());h+=`<tr${t.includes('deadline')?' style="font-weight:700;color:#B5473A"':''}><td>${t}</td><td>${o>0?'+':''}${o}</td><td>${dstr(dt)}${we?' <span class="case">weekend</span>':''}</td></tr>`}
+ h+='</table><p class="note">Deadlines shown are the typical ICH/EU/UK values (70 or 90 days after the DLP). Confirm each region’s deadline and route; Canada’s annual summary report is retained unless a significant change is found (Chapter 24).</p>';$('cy_out').innerHTML=h}
+
+// ---- 2 rate ----
+function rate(){const n=v('r_n'),d=v('r_d'),per=+$('r_per').value,u=$('r_u').value;if(!(d>0)||!(n>=0)){$('r_out').innerHTML='<div class="warn">Enter cases and a positive denominator.</div>';return}
+ const [lo,hi]=poisCI(n),f=per/d;let h=`<div class="kpi"><div><b>${fmt(n*f,2)}</b><span>per ${per.toLocaleString()} ${u}</span></div><div><b>${fmt(lo*f,2)} – ${fmt(hi*f,2)}</b><span>exact 95% CI</span></div><div><b>${n}</b><span>cases</span></div></div>`;
+ if(n===0)h+=`<div class="out">Zero events: rule-of-three upper 95% bound ≈ ${fmt(3/d*per,2)} per ${per.toLocaleString()} ${u} (1 in ${Math.round(d/3).toLocaleString()}). Absence of events does not show absence of risk.</div>`;
+ if(n>0&&n<10)h+=`<div class="warn">Fewer than 10 cases: the rate is unstable. Report the count alongside the rate.</div>`;
+ h+=`<div class="out">Suggested wording: “${n} case${n===1?'':'s'} ${n===1?'was':'were'} reported (${fmt(n*f,2)} per ${per.toLocaleString()} ${u}; exact 95% CI ${fmt(lo*f,2)}–${fmt(hi*f,2)}).”</div>`;$('r_out').innerHTML=h}
+
+// ---- 3 exposure ----
+function expo(){const cp=v('e_cp'),xp=v('e_xp'),cc=v('e_cc'),xo=v('e_xo'),xn=v('e_xn'),sol=v('e_sol')||0;if(![cp,xp,cc,xo,xn].every(x=>x>0)){$('e_out').innerHTML='<div class="warn">Complete all required fields.</div>';return}
+ const K=1e5,rp=cp/xp*K,rn=cc/xn*K,ro=cc/xo*K,rs=(cc-sol)/xo*K,pc=x=>(x/rp-1)*100;
+ const rows=[["Previous interval",rp,null,'#8A94A0'],["Current, new denominator",rn,pc(rn),'#B5473A'],["Current, like-for-like",ro,pc(ro),'#0E6E7E']];if(sol>0)rows.push(["Current, excl. solicited, like-for-like",rs,pc(rs),'#4E8A4E']);
+ const mx=Math.max(...rows.map(r=>r[1]));let h='<table><tr><th>Comparison</th><th>Rate per 100,000</th><th>Change vs previous</th><th></th></tr>';
+ for(const [t,r,c,col] of rows)h+=`<tr><td>${t}</td><td>${fmt(r)}</td><td>${c===null?'—':(c>0?'+':'')+fmt(c,0)+'%'}</td><td><span class="bar" style="width:${r/mx*220}px;background:${col}"></span></td></tr>`;
+ h+='</table>';const art=pc(rn)-pc(ro);
+ h+=`<div class="out">Of the apparent change of ${fmt(pc(rn),0)}%, about ${fmt(art,0)} percentage points come from the change in exposure method. Compare like with like (Chapter 8), report both estimates in Section 5, and state which denominator Section 16 uses.${sol>0?` Excluding ${sol} solicited cases, the change is ${fmt(pc(rs),0)}%.`:''}</div>`;$('e_out').innerHTML=h}
+
+// ---- 4 recon ----
+function recon(){const r=v('c_ret'),du=v('c_dup')||0,df=v('c_def')||0,so=v('c_sol')||0;if(!(r>=0)){return}
+ const cases=r-du-df,sp=cases-so;let h=`<table><tr><th>Step</th><th>Count</th><th>Explanation for the report</th></tr>
+ <tr><td>Reports retrieved</td><td>${r}</td><td>Tabulation / search result</td></tr>
+ <tr><td>− Duplicates</td><td>${du}</td><td>Identified at medical review</td></tr><tr><td>− Not meeting case definition</td><td>${df}</td><td>Excluded on definition only (never for confounding)</td></tr>
+ <tr style="font-weight:700"><td>= Cases evaluated</td><td>${cases}</td><td>Use this number in Section 16 and the executive summary</td></tr>`;
+ if(so)h+=`<tr><td>of which solicited / program</td><td>${so}</td><td>Show results with and without</td></tr><tr><td>Spontaneous cases</td><td>${sp}</td><td></td></tr>`;
+ h+='</table>';h+=cases<0?'<div class="warn">Exclusions exceed retrieved reports.</div>':`<div class="out">Suggested Section 6 sentence: “The search retrieved ${r} reports. After removal of ${du} duplicate${du===1?'':'s'}${df?` and ${df} report${df===1?'':'s'} not meeting the case definition`:''}, ${cases} cases were evaluated${so?`, of which ${so} originated from solicited sources`:''}.”</div>`;$('c_out').innerHTML=h}
+
+// ---- 5 O/E ----
+function oe(){const o=v('o_obs'),py=v('o_py'),bg=v('o_bg');if(!(py>0&&bg>0&&o>=0)){$('o_out').innerHTML='<div class="warn">Complete all fields.</div>';return}
+ const e=bg*py/1e5,[lo,hi]=poisCI(o);let h=`<div class="kpi"><div><b>${fmt(e,2)}</b><span>expected</span></div><div><b>${o}</b><span>observed</span></div><div><b>${fmt(o/e,1)}</b><span>O/E ratio</span></div><div><b>${fmt(lo/e,1)} – ${fmt(hi/e,1)}</b><span>95% CI (exact on O)</span></div></div>`;
+ h+=`<div class="out">“Using a background rate of ${bg} per 100,000 person-years${$('o_src').value?` (${esc($('o_src').value)})`:''}, ${fmt(e,2)} cases would be expected in ${py.toLocaleString()} patient-years; ${o} were reported (ratio ${fmt(o/e,1)}). Because of under-reporting the observed count is likely a lower bound; the background rate comes from a different population and case definition, so the comparison is approximate.”</div>`;$('o_out').innerHTML=h}
+
+// ---- 6 trial ----
+function trial(){const a=v('t_a'),n1=v('t_n1'),b=v('t_b'),n2=v('t_n2');if(!(n1>0&&n2>0&&a>=0&&b>=0)){return}
+ const p1=a/n1,p2=b/n2,rd=p1-p2,se=Math.sqrt(p1*(1-p1)/n1+p2*(1-p2)/n2);let rr='—',rrci='—';
+ if(a>0&&b>0){const r=p1/p2,s=Math.sqrt(1/a-1/n1+1/b-1/n2);rr=fmt(r,2);rrci=fmt(Math.exp(Math.log(r)-1.96*s),2)+' – '+fmt(Math.exp(Math.log(r)+1.96*s),2)}
+ const lo=rd-1.96*se,hi=rd+1.96*se;let nnt=rd===0?'∞':Math.round(1/Math.abs(rd));
+ let h=`<div class="kpi"><div><b>${fmt(p1*100)}% vs ${fmt(p2*100)}%</b><span>${a}/${n1} vs ${b}/${n2}</span></div><div><b>${rr}</b><span>relative risk (95% CI ${rrci})</span></div><div><b>${fmt(rd*100)} pts</b><span>risk difference (95% CI ${fmt(lo*100)} to ${fmt(hi*100)})</span></div><div><b>${nnt}</b><span>${rd>=0?'number needed to harm':'number needed to treat'}</span></div></div>`;
+ if(lo<0&&hi>0)h+='<div class="warn">The risk-difference CI includes zero; the NNH/NNT interval spans infinity.</div>';
+ h+=`<div class="out">“The event occurred in ${fmt(p1*100)}% of treated patients (${a} of ${n1}) and ${fmt(p2*100)}% of control patients (${b} of ${n2}); risk difference ${fmt(rd*100)} percentage points${rd>0?` (one additional patient for every ${nnt} treated)`:''}.”</div>`;$('t_out').innerHTML=h}
+
+// ---- 7 signal ----
+function sigBar(){const g=[['s_sup','#4E8A4E','supporting'],['s_comp','#D9922E','competing'],['s_ins','#8A94A0','insufficient'],['s_ag','#1F3A5F','against']],t=g.reduce((s,x)=>s+(+$(x[0]).value||0),0);
+ $('s_bar').innerHTML=t?'<div style="margin-top:10px">'+g.map(([id,c,l])=>{const n=+$(id).value||0;return n?`<span class="bar" style="width:${n/t*100}%;background:${c};color:#fff;font-size:12px;text-align:center;line-height:18px">${n} ${l}</span>`:''}).join('')+`</div><p class="note">${t} cases in the evidence set. None should be excluded for confounding.</p>`:''}
+['s_sup','s_comp','s_ins','s_ag'].forEach(i=>$(i).oninput=sigBar);
+function signal(){const lv=document.querySelector('input[name=s_lvl]:checked'),g=id=>esc($(id).value.trim());const n=['s_sup','s_comp','s_ins','s_ag'].map(i=>+$(i).value||0);
+ if(!lv||!$('s_q').value.trim()){$('s_out').innerHTML='<div class="warn">Write the evaluation question and choose a conclusion level.</div>';return}
+ const acts=$('s_act').value.split('\n').filter(x=>x.trim()).map((x,i)=>`(${i+1}) ${esc(x.trim())}`).join('; ');
+ let t=`16.2.x ${g('s_prod')}\n\nSource and background. ${g('s_q')}\n\nMethods. ${g('s_src')} Case definition: ${g('s_def')}\n\nResults. ${n.reduce((a,b)=>a+b)} cases met the case definition: ${n[0]} informative and supportive, ${n[1]} with a competing explanation that does not exclude a role for the product, ${n[2]} with insufficient information${n[3]?`, and ${n[3]} informative against an association`:''}. ${g('s_feat')} ${g('s_cum')}\n\nDiscussion. ${g('s_alt')}\n\nConclusion. ${lv.value}. ${g('s_unc')}${$('s_altpos').value.trim()?' An alternative interpretation was considered: '+g('s_altpos'):''}\n\nActions. ${acts||'No action proposed; routine monitoring continues.'} See Sections 4 and 19.`;
+ let warn='';if(lv.value.includes('supports')&&n[0]===0)warn='<div class="warn">“Supports” is chosen but no informative supporting cases are recorded.</div>';
+ if(lv.value.includes('does not support')&&n[3]===0)warn+='<div class="warn">“Does not support” usually needs informative evidence against an association; otherwise consider “insufficient to assess”.</div>';
+ if(!acts&&(lv.value.includes('supports')))warn+='<div class="warn">A supported association normally leads to an action (RSI, RMP, or risk minimization).</div>';
+ $('s_out').innerHTML=warn+`<div class="out">${t}</div><button class="btn alt" onclick="navigator.clipboard.writeText(this.previousElementSibling.innerText).then(()=>this.textContent='Copied').catch(()=>this.textContent='Select the text and copy')">Copy text</button>`}
+
+// ---- 8 BR ----
+function brRow(r=['Benefit','','','','']){const tr=document.createElement('tr');tr.innerHTML=`<td><select><option ${r[0]==='Benefit'?'selected':''}>Benefit</option><option ${r[0]==='Risk'?'selected':''}>Risk</option></select></td>`+r.slice(1).map(x=>`<td><input value="${esc(x)}"></td>`).join('')+'<td><button class="btn alt" style="padding:3px 8px" onclick="this.closest(\'tr\').remove()">✕</button></td>';$('b_tab').querySelector('tbody').appendChild(tr)}
+function brOut(){const rows=[...$('b_tab').querySelectorAll('tbody tr')].map(tr=>[tr.querySelector('select').value,...[...tr.querySelectorAll('input')].map(i=>i.value)]);
+ const nb=rows.filter(r=>r[0]==='Benefit').length,nr=rows.length-nb;let w='';
+ if(!nb)w+='<div class="warn">No benefit rows: Section 18 cannot weigh anything without described benefits.</div>';if(!nr)w+='<div class="warn">No risk rows.</div>';
+ if(!$('b_chg').value.trim())w+='<div class="warn">State what changed this interval, even if nothing did.</div>';
+ if(/remains positive\.?$/i.test($('b_con').value.trim())&&$('b_con').value.trim().split(' ').length<8)w+='<div class="warn">The conclusion restates “remains positive” without reasons. Say why.</div>';
+ let h=`<table><tr><th></th><th>Description</th><th>Magnitude</th><th>Evidence</th><th>Uncertainty</th></tr>`+rows.map(r=>`<tr><td><b>${r[0]}</b></td>${r.slice(1).map(x=>`<td>${esc(x)}</td>`).join('')}</tr>`).join('')+'</table>';
+ h+=`<div class="out">18.1 Context — ${esc($('b_ind').value)}. ${esc($('b_ctx').value)}\n\n18.2 Benefit–risk analysis. ${rows.filter(r=>r[0]==='Benefit').map(r=>`The principal benefit is ${esc(r[1])} (${esc(r[2])}).`).join(' ')} ${rows.filter(r=>r[0]==='Risk').map(r=>`${esc(r[1])}: ${esc(r[2])}.`).join(' ')} ${esc($('b_chg').value)}\n\n${esc($('b_con').value)}</div>`;$('b_warn').innerHTML=w;$('b_out').innerHTML=h}
+
+// ---- 9 consistency ----
+function kRow(t='',c=[0,0,0,0,0,0,0]){const tr=document.createElement('tr');tr.innerHTML=`<td><input value="${esc(t)}"></td>`+c.map(x=>`<td><input type="checkbox" style="width:auto" ${x?'checked':''}></td>`).join('')+'<td><button class="btn alt" style="padding:3px 8px" onclick="this.closest(\'tr\').remove()">✕</button></td>';$('k_tab').querySelector('tbody').appendChild(tr)}
+function kCheck(){const H=['4','15','16','18','19','Exec. summary','RMP/regional'];let out='';[...$('k_tab').querySelectorAll('tbody tr')].forEach(tr=>{const t=tr.querySelector('input').value||'(unnamed)',c=[...tr.querySelectorAll('input[type=checkbox]')].map(x=>x.checked),miss=[];
+ if(!c[4])miss.push('Section 19 (every action must be listed there)');if(!c[2])miss.push('Section 16 (the supporting evaluation)');if(!c[5])miss.push('executive summary');
+ if(/rsi|ccds|label|warning|contraindic/i.test(t)&&!c[0])miss.push('Section 4 (proposed RSI changes)');if(/rmp|reclassif|risk minim|alert card/i.test(t)&&!c[6])miss.push('RMP / regional appendix');if(/reclassif|warning|risk/i.test(t)&&!c[3])miss.push('Section 18 (does the weighing reflect it?)');
+ out+=miss.length?`<div class="warn"><b>${esc(t)}</b> — check: ${miss.join('; ')}.</div>`:`<div class="ok"><b>${esc(t)}</b> — appears in all expected sections.</div>`});$('k_out').innerHTML=out||'<div class="note">Add actions first.</div>'}
+
+// ---- 10 QC ----
+const QC={"Context (1–4)":["RSI version used as reference is stated and appended","Every RSI change has a reason and evaluation reference","Pending RSI changes are described in Section 4","Section 3 includes actions by all regulators and trial bodies"],
+"Exposure (5)":["Method, coverage, assumptions, and limitations stated","If the method changed, both estimates are given","Denominator matches the event mechanism","Use-pattern changes are described"],
+"Evidence (6–14)":["Every count reconciled with tabulations (T7)","MedDRA version and conventions stated","Literature search documented to the DLP","Late-breaking information checked and its effect stated"],
+"Evaluation (15–16)":["All validated signals, including refuted and external ones, are in Section 15","Each closed signal has a defined question and case definition","Confounded cases retained and characterized","Conclusion language matches the four-level scale","Changes from the previous report are explained"],
+"Judgement (17–19)":["Benefit quantified with absolute measures","Effects table and visible weighing per indication","Every new or changed risk reflected in Section 18","Actions identical in Sections 4, 15, 16, 18, 19 and the summary","Executive summary written last, exact numbers"],
+"Quality control":["Every rate recomputed","Every cross-reference followed","Appendix numbering frozen"],
+"Regulatory":["Previous-request table complete with locations","Regional appendices present","Submission routes and deadlines confirmed for each region"]};
+(function(){let h='';for(const [g,items] of Object.entries(QC)){h+=`<h3 style="margin-top:14px">${g}</h3>`+items.map(i=>`<label style="margin:4px 0"><input type="checkbox" class="qcb" style="width:auto;margin-right:8px">${i}</label>`).join('')}$('q_list').innerHTML=h;document.querySelectorAll('.qcb').forEach(c=>c.onchange=qp);qp()})();
+function qp(){const c=document.querySelectorAll('.qcb'),d=[...c].filter(x=>x.checked).length;$('q_prog').innerHTML=`${d} of ${c.length} checks complete <span class="bar" style="width:${d/c.length*300}px;background:var(--teal);margin-left:10px"></span>`}
+
+// ---- demos (fictional composite cases, synthetic data) ----
+function set(o){for(const [k,x] of Object.entries(o))$(k).value=x}
+function demo(k){const D={
+cycleD:()=>{set({cy_dlp:'2026-04-02',cy_len:'70',cy_buf:5});cycle()},
+rateD:()=>{set({r_n:4,r_d:8268,r_u:'infusions',r_per:'1000'});rate()},
+rateB:()=>{set({r_n:0,r_d:1150,r_u:'patients',r_per:'100'});rate()},
+expoA:()=>{set({e_cp:412,e_xp:1420000,e_cc:485,e_xo:1480000,e_xn:1050000,e_sol:61});expo()},
+reconA:()=>{set({c_ret:508,c_dup:23,c_def:0,c_sol:61});recon()},
+reconB:()=>{set({c_ret:61,c_dup:0,c_def:47,c_sol:0});recon()},
+oeB:()=>{set({o_obs:14,o_py:6800,o_bg:30,o_src:'hospitalized acute liver injury, older adults with chronic lung disease'});oe()},
+trialB:()=>{set({t_a:47,t_n1:1150,t_b:18,t_n2:1148});trial()},
+sigB:()=>{set({s_prod:'Halvorast — severe drug-induced liver injury (fictional)',s_q:'Does halvorast cause severe drug-induced liver injury (hepatocellular injury with jaundice or hepatic failure), beyond the asymptomatic transaminase elevations already listed in the RSI?',
+ s_src:'Company safety database searched cumulatively to the DLP (19 May 2026) using the SMQ "Drug related hepatic disorders – comprehensive search" (broad); pooled pivotal trials; extension study HAL-301; one registry cohort; non-clinical package.',
+ s_def:'ALT ≥ 3 × ULN or ALP ≥ 2 × ULN with bilirubin ≥ 2 × ULN, jaundice, INR > 1.5, or hepatic failure, after the start of halvorast.',s_sup:5,s_comp:5,s_ins:4,s_ag:0,
+ s_feat:'Time to onset (n = 11): median 52 days (range 18–141). Dechallenge positive in 8 of 10; one positive rechallenge. One potential Hy\'s law case had no alternative explanation.',
+ s_cum:'Trials: ALT > 3 × ULN 4.1% vs 1.6% placebo; no Hy\'s law cases in 1,150 treated patients. Registry: adjusted HR 1.1 (95% CI 0.6–2.0). Observed 14 vs expected 2.04 cases (approximate).',
+ s_alt:'Concomitant hepatotoxins, hepatitis E, alcohol, and gallstones explain some cases but not the pattern of informative cases. Stimulated reporting after the January 2026 RSI update may inflate the interval rate.',
+ s_unc:'The frequency of severe injury cannot be estimated precisely, and the registry cohort neither confirms nor excludes an increased risk.',s_altpos:'that the evidence is suggestive but insufficient; not adopted because of consistent time to onset, dechallenge, and rechallenge findings.',
+ s_act:'Reclassify DILI as an important identified risk in the RMP\nAdd CCDS 4.4 warning: liver tests before treatment and monthly for the first three months\nIntroduce a targeted hepatic follow-up questionnaire'});
+ document.querySelector('input[name=s_lvl][value="The evidence supports a causal association"]').checked=true;sigBar();signal()},
+brB:()=>{set({b_ind:'Halvorast in idiopathic pulmonary fibrosis (fictional)',b_ctx:'Progressive, fatal lung disease (median survival 3–5 years); two other antifibrotics with tolerability limitations; no treatment reverses fibrosis.',
+ b_chg:'Severe drug-induced liver injury was confirmed as an identified risk this interval (Section 16.2); it is uncommon, reversible, and expected to be largely preventable with liver test monitoring.',
+ b_con:'The benefit–risk balance in IPF remains positive, provided the proposed liver test monitoring is implemented, given the seriousness of the disease and the magnitude of benefit.'});
+ $('b_tab').querySelector('tbody').innerHTML='';[['Benefit','Slowing of FVC decline','105 mL/yr (95% CI 62–148)','Two RCTs','Survival effect not established'],['Risk','Severe DILI','Uncommon; reversible','Postmarketing; trials','Exact frequency unknown'],['Risk','ALT > 3 × ULN','4.1% vs 1.6%','RCTs','Low'],['Risk','Diarrhea','28% vs 11%','RCTs','Low']].forEach(brRow);brOut()},
+consB:()=>{$('k_tab').querySelector('tbody').innerHTML='';kRow('Reclassify DILI as important identified risk (RMP)',[0,1,1,1,1,1,1]);kRow('New CCDS warning on liver test monitoring',[1,1,1,1,1,0,1]);kRow('Targeted hepatic follow-up questionnaire',[0,0,1,0,0,0,0]);kCheck()}};
+ D[k]()}
+brRow();kRow();
+</script>
+</body>
+</html>
